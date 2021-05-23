@@ -1,32 +1,41 @@
+import { useNavigation } from '@react-navigation/core';
+import { Button, Container, Content, Footer, H2, Header, List, ListItem, Text } from 'native-base';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { TodoListStateContext } from '../contexts/providers/TodoListProvider';
 
 export default function TabOneScreen() {
+  const { todo_list } = React.useContext(TodoListStateContext);
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-    </View>
+    <Container>
+      <Content>
+        <List>
+          {todo_list.map(todo => {
+            return (
+              <ListItem>
+                <H2>{todo.title}</H2>
+              </ListItem>
+            );
+          })}
+        </List>
+      </Content>
+      <Footer>
+        <Content>
+          <Button style={styles.button} block primary
+            onPress={() => {
+              navigation.navigate("CreateTodoScreen");
+            }}
+          ><Text> create </Text></Button>
+        </Content>
+      </Footer>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+  button: {
+    marginHorizontal: 10,
+  }
 });
