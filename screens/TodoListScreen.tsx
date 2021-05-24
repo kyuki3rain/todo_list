@@ -14,7 +14,7 @@ export default function TodoListScreen() {
         <List>
           {todo_list.map(todo => {
             return (
-              <ListItem>
+              <ListItem key={todo.id}>
                 <H2>{todo.title}</H2>
               </ListItem>
             );

@@ -5,13 +5,7 @@ export const TodoListStateContext = createContext({} as TodoListState);
 export const TodoListDispatchContext = createContext({} as React.Dispatch<TodoListAction>);
 
 export const TodoListProvider: React.FC = ({ children }) => {
-    const [state, dispatch] = useReducer(reducer, { todo_list: [
-      {title: "abc", body: "abcd"},
-      {title: "abc", body: "abcd"},
-      {title: "abc", body: "abcd"},
-      {title: "abc", body: "abcd"},
-      {title: "abc", body: "abcd"},
-    ]});
+    const [state, dispatch] = useReducer(reducer, { todo_list: []});
   
     return (
       <TodoListStateContext.Provider value={state}>
