@@ -11,7 +11,7 @@ import { ColorSchemeName } from 'react-native';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
-import TabOneScreen from '../screens/TabOneScreen';
+import TodoListScreen from '../screens/TodoListScreen';
 import CreateTodoScreen from '../screens/CreateTodoScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -30,10 +30,10 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator initialRouteName="TabOneScreen">
+    <Stack.Navigator initialRouteName="TodoListScreen">
       <Stack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
+        name="TodoListScreen"
+        component={TodoListScreen}
         options={{ headerTitle: 'Tab One Title' }}
       />
       <Stack.Screen

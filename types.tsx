@@ -4,7 +4,7 @@
  */
 
 export type RootStackParamList = {
-  TabOneScreen: undefined;
+  TodoListScreen: undefined;
   CreateTodoScreen: undefined;
   NotFound: undefined;
 };
