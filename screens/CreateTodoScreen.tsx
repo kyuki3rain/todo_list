@@ -20,7 +20,7 @@ export default function CreateTodoScreen() {
           <Textarea style={styles.body} rowSpan={5} bordered placeholder="Body"  onChangeText={onChangeBody} value={body} />
           <Button style={styles.button} block primary
             onPress={() => {
-              dispatch({ type: "add", value: { todo: { title, body } } });
+              dispatch({ type: "add", value: { title, body } });
               navigation.goBack();
             }}
           ><Text> create </Text></Button>

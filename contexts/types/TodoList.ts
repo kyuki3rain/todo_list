@@ -1,4 +1,5 @@
 type Todo = {
+    id: number,
     title: String,
     body: String
 }
