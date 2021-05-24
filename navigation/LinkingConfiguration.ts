@@ -10,7 +10,7 @@ export default {
   prefixes: [Linking.makeUrl('/')],
   config: {
     screens: {
-      TabOneScreen: 'TabOneScreen',
+      TodoListScreen: 'TodoListScreen',
       CreateTodoScreen: 'CreateTodoScreen',
       NotFound: '*',
     },

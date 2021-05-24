@@ -4,7 +4,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { TodoListStateContext } from '../contexts/providers/TodoListProvider';
 
-export default function TabOneScreen() {
+export default function TodoListScreen() {
   const { todo_list } = React.useContext(TodoListStateContext);
   const navigation = useNavigation();
 
