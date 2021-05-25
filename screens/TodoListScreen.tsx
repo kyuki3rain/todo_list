@@ -46,7 +46,7 @@ export default function TodoListScreen() {
             onPress={() => {
               navigation.navigate("CreateTodoScreen");
             }}
-          ><Text> create </Text></Button>
+          ><Text> new </Text></Button>
         </Content>
       </Footer>
     </Container>

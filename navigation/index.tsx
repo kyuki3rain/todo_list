@@ -34,12 +34,12 @@ function RootNavigator() {
       <Stack.Screen
         name="TodoListScreen"
         component={TodoListScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        options={{ headerTitle: 'TodoList' }}
       />
       <Stack.Screen
         name="CreateTodoScreen"
         component={CreateTodoScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        options={{ headerTitle: 'Create New Todo' }}
       />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
