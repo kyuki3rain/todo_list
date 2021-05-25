@@ -1,10 +1,9 @@
 import { useNavigation } from '@react-navigation/core';
 import { Button, Container, Content, Form, Input, Item, Text, Textarea } from 'native-base';
 import * as React from 'react';
-import { useMutation } from 'react-apollo';
+import { useMutation, gql } from '@apollo/client';
 import { StyleSheet } from 'react-native';
 import getUniqueStr from '../helpers/getUniqueStr';
-import gql from 'graphql-tag';
 
 const CREATE_TODO = gql`
   mutation createTodo($id: String, $title: String, $body: String) {

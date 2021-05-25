@@ -1,9 +1,8 @@
 import { useNavigation } from '@react-navigation/core';
 import { Button, Container, Content, Footer, H2, Header, List, ListItem, Text } from 'native-base';
 import * as React from 'react';
-import { useQuery } from 'react-apollo';
+import { useQuery, gql } from '@apollo/client';
 import { StyleSheet } from 'react-native';
-import gql from 'graphql-tag';
 
 const ListTodos = gql`
   query ListTodos {
@@ -21,8 +20,8 @@ export default function TodoListScreen() {
   const navigation = useNavigation();
   const { loading, error, data } = useQuery(ListTodos);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error :(</Text>;
 
 
   return (
