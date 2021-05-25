@@ -20,7 +20,7 @@ const CREATE_TODO = gql`
 
 export default function CreateTodoScreen() {
   const navigation = useNavigation();
-  const [createTodo, { data }] = useMutation(CREATE_TODO);
+  const [createTodo, _] = useMutation(CREATE_TODO);
 
   const [title, onChangeTitle] = React.useState("");
   const [body, onChangeBody] = React.useState("");
@@ -39,7 +39,7 @@ export default function CreateTodoScreen() {
               createTodo({ variables: { ...todo } });
               const { listTodos } = client.readQuery({ query: ListTodos });
               const newListTodos = {...listTodos, items: [...listTodos.items, todo]};
-              client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
+              await client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
               navigation.goBack();
             }}
           ><Text> create </Text></Button>
