@@ -4,10 +4,12 @@ import * as React from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { StyleSheet } from 'react-native';
 import getUniqueStr from '../helpers/getUniqueStr';
+import { client } from '../graphql/client';
+import { ListTodos } from '../graphql/queries/ListTodos';
 
 const CREATE_TODO = gql`
-  mutation createTodo($id: String, $title: String, $body: String) {
-    createTodo(input: {id: $id, title: $title, body: $body}) {
+  mutation createTodo($id: ID!, $title: String!, $body: String) {
+    createTodo(input: { id: $id, title: $title, body: $body }) {
       id
       title
       body
@@ -32,8 +34,12 @@ export default function CreateTodoScreen() {
           </Item>
           <Textarea style={styles.body} rowSpan={5} bordered placeholder="Body"  onChangeText={onChangeBody} value={body} />
           <Button style={styles.button} block primary
-            onPress={() => {
-              createTodo({ variables: { title, body, id: getUniqueStr() } });
+            onPress={async () => {
+              const todo = { title, body, id: getUniqueStr() };
+              createTodo({ variables: { ...todo } });
+              const { listTodos } = client.readQuery({ query: ListTodos });
+              const newListTodos = {...listTodos, items: [...listTodos.items, todo]};
+              client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
               navigation.goBack();
             }}
           ><Text> create </Text></Button>

@@ -1,20 +1,9 @@
 import { useNavigation } from '@react-navigation/core';
 import { Button, Container, Content, Footer, H2, Header, List, ListItem, Text } from 'native-base';
 import * as React from 'react';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { StyleSheet } from 'react-native';
-
-const ListTodos = gql`
-  query ListTodos {
-    listTodos {
-      items {
-        id
-        title
-        body
-      }
-    }
-  }
-`;
+import { ListTodos } from '../graphql/queries/ListTodos';
 
 export default function TodoListScreen() {
   const navigation = useNavigation();
