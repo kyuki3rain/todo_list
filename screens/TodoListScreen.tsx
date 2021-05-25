@@ -1,30 +1,44 @@
 import { useNavigation } from '@react-navigation/core';
-import { Button, Container, Content, Footer, H2, Header, List, ListItem, Text } from 'native-base';
+import { Button, Container, Content, Footer, Icon, SwipeRow, Text } from 'native-base';
 import * as React from 'react';
-import { useQuery } from '@apollo/client';
-import { StyleSheet } from 'react-native';
+import { useMutation, useQuery } from '@apollo/client';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { ListTodos } from '../graphql/queries/ListTodos';
+import { DELETE_TODO } from '../graphql/mutations/deleteTodos';
+import { client } from '../graphql/client';
 
 export default function TodoListScreen() {
   const navigation = useNavigation();
   const { loading, error, data } = useQuery(ListTodos);
+  const [deleteTodos, _] = useMutation(DELETE_TODO);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error :(</Text>;
 
-
   return (
     <Container>
-      <Content>
-        <List>
-          {data.listTodos.items.map((todo: Todo) => {
-            return (
-              <ListItem key={todo.id}>
-                <H2>{todo.title}</H2>
-              </ListItem>
-            );
-          })}
-        </List>
+      <Content style={{flex: 1}}>
+        <FlatList
+          data={data.listTodos.items}
+          renderItem={({item}) => <SwipeRow
+            rightOpenValue={-75}
+            body={
+              <View>
+                <Text style={{ paddingLeft: 15 }}>{item.title}</Text>
+              </View>
+            }
+            right={
+              <Button danger onPress={() => {
+                deleteTodos({variables: { id: item.id, title: item.title }});
+                const { listTodos } = client.readQuery({ query: ListTodos });
+                const newListTodos = {...listTodos, items: listTodos.items.filter((todo: Todo) => todo.id !== item.id)};
+                client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
+              }}>
+                <Icon active name="trash" />
+              </Button>
+            }
+          />}
+        />
       </Content>
       <Footer>
         <Content>
