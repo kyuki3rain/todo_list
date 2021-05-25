@@ -2,12 +2,14 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AppLoading from 'expo-app-loading';
+import { Root } from 'native-base';
+import { ApolloProvider } from '@apollo/client/react';
 
 import { Provider } from './contexts/Provider';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-import { Root } from 'native-base';
+import { client } from './graphql/client';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -17,14 +19,16 @@ export default function App() {
     return <AppLoading />;
   } else {
     return (
-      <Provider>
-        <SafeAreaProvider>
-          <Root>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar />
-          </Root>
-        </SafeAreaProvider>
-      </Provider>
+      <ApolloProvider client={client}>
+        <Provider>
+          <SafeAreaProvider>
+            <Root>
+              <Navigation colorScheme={colorScheme} />
+              <StatusBar />
+            </Root>
+          </SafeAreaProvider>
+        </Provider>
+      </ApolloProvider>
     );
   }
 }

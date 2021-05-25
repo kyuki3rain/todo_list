@@ -1,12 +1,27 @@
 import { useNavigation } from '@react-navigation/core';
-import { Button, Container, Content, Footer, Form, H2, Header, Input, Item, List, ListItem, Text, Textarea } from 'native-base';
+import { Button, Container, Content, Form, Input, Item, Text, Textarea } from 'native-base';
 import * as React from 'react';
+import { useMutation, gql } from '@apollo/client';
 import { StyleSheet } from 'react-native';
-import { TodoListDispatchContext } from '../contexts/providers/TodoListProvider';
+import getUniqueStr from '../helpers/getUniqueStr';
+import { client } from '../graphql/client';
+import { ListTodos } from '../graphql/queries/ListTodos';
+
+const CREATE_TODO = gql`
+  mutation createTodo($id: ID!, $title: String!, $body: String) {
+    createTodo(input: { id: $id, title: $title, body: $body }) {
+      id
+      title
+      body
+    }
+  }
+`;
+
 
 export default function CreateTodoScreen() {
-  const dispatch = React.useContext(TodoListDispatchContext);
   const navigation = useNavigation();
+  const [createTodo, { data }] = useMutation(CREATE_TODO);
+
   const [title, onChangeTitle] = React.useState("");
   const [body, onChangeBody] = React.useState("");
 
@@ -19,8 +34,12 @@ export default function CreateTodoScreen() {
           </Item>
           <Textarea style={styles.body} rowSpan={5} bordered placeholder="Body"  onChangeText={onChangeBody} value={body} />
           <Button style={styles.button} block primary
-            onPress={() => {
-              dispatch({ type: "add", value: { title, body } });
+            onPress={async () => {
+              const todo = { title, body, id: getUniqueStr() };
+              createTodo({ variables: { ...todo } });
+              const { listTodos } = client.readQuery({ query: ListTodos });
+              const newListTodos = {...listTodos, items: [...listTodos.items, todo]};
+              client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
               navigation.goBack();
             }}
           ><Text> create </Text></Button>
