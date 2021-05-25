@@ -1,18 +1,35 @@
 import { useNavigation } from '@react-navigation/core';
 import { Button, Container, Content, Footer, H2, Header, List, ListItem, Text } from 'native-base';
 import * as React from 'react';
+import { graphql, useQuery } from 'react-apollo';
 import { StyleSheet } from 'react-native';
-import { TodoListStateContext } from '../contexts/providers/TodoListProvider';
+
+const ListTodos = graphql`
+  query ListTodos {
+    listTodos {
+      items {
+        id
+        title
+        body
+      }
+    }
+  }
+`;
 
 export default function TodoListScreen() {
-  const { todo_list } = React.useContext(TodoListStateContext);
   const navigation = useNavigation();
+
+  const { loading, error, data } = useQuery(ListTodos);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
 
   return (
     <Container>
       <Content>
         <List>
-          {todo_list.map(todo => {
+          {data.listTodos.items.map((todo: Todo) => {
             return (
               <ListItem key={todo.id}>
                 <H2>{todo.title}</H2>
