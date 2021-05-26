@@ -6,16 +6,16 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { ListTodos } from '../graphql/queries/ListTodos';
 import { DELETE_TODO } from '../graphql/mutations/DeleteTodos';
 import { client } from '../graphql/client';
-import { Todo } from '../graphql/generated/graphql';
+import { Mutation, Query } from '../graphql/generated/graphql';
 
 export default function TodoListScreen() {
   const navigation = useNavigation();
-  const { loading, error, data, refetch } = useQuery(ListTodos);
-  const [deleteTodos, _] = useMutation(DELETE_TODO);
+  const { loading, error, data, refetch } = useQuery<Query>(ListTodos);
+  const [deleteTodos, _] = useMutation<Mutation>(DELETE_TODO);
 
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
-  if (loading) return <Text>Loading...</Text>;
+  if (loading || !data) return <Text>Loading...</Text>;
   if (error) return <Text>Error :(</Text>;
 
   const onRefresh = async () => {
@@ -27,25 +27,28 @@ export default function TodoListScreen() {
   return (
     <Container>
       <FlatList
-        data={data.listTodos.items}
-        renderItem={({item}) => <SwipeRow
-          rightOpenValue={-75}
-          body={
-            <View>
-              <Text style={{ paddingLeft: 15 }}>{item.title}</Text>
-            </View>
-          }
-          right={
-            <Button danger onPress={() => {
-              deleteTodos({variables: { id: item.id, title: item.title }});
-              const { listTodos } = client.readQuery({ query: ListTodos });
-              const newListTodos = {...listTodos, items: listTodos.items.filter((todo: Todo) => todo.id !== item.id)};
-              client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
-            }}>
-              <Icon active name="trash" />
-            </Button>
-          }
-        />}
+        data={data.listTodos?.items}
+        renderItem={({item}) => {
+          if (!item) {return null;}
+          return <SwipeRow
+            rightOpenValue={-75}
+            body={
+              <View>
+                <Text style={{ paddingLeft: 15 }}>{item.title}</Text>
+              </View>
+            }
+            right={
+              <Button danger onPress={() => {
+                deleteTodos({variables: { id: item.id, title: item.title }});
+                const { listTodos } = client.readQuery<Query>({ query: ListTodos })!;
+                const newListTodos = {...listTodos, items: listTodos?.items?.filter((todo) => todo?.id !== item.id)};
+                client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
+              }}>
+                <Icon active name="trash" />
+              </Button>
+            }
+          />;
+        }}
         onRefresh={() => onRefresh()}
         refreshing={isRefreshing}
       />
