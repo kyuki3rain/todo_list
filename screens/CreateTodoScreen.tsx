@@ -10,7 +10,7 @@ import { Mutation, Query } from '../graphql/generated/graphql';
 
 const CREATE_TODO = gql`
   mutation createTodo($id: ID!, $title: String!, $body: String) {
-    createTodo(input: { id: $id, title: $title, body: $body }) {
+    createTodo(input: { id: $id, title: $title, body: $body, completed: false }) {
       id
       title
       body
@@ -35,12 +35,12 @@ export default function CreateTodoScreen() {
           </Item>
           <Textarea style={styles.body} rowSpan={5} bordered placeholder="Body"  onChangeText={onChangeBody} value={body} />
           <Button style={styles.button} block primary
-            onPress={async () => {
+            onPress={() => {
               const todo = { title, body, id: getUniqueStr() };
               createTodo({ variables: { ...todo } });
               const { listTodos } = client.readQuery<Query>({ query: ListTodos })!;
               const newListTodos = {...listTodos, items: [...listTodos!.items!, todo]};
-              await client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
+              client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
               navigation.goBack();
             }}
           ><Text> create </Text></Button>
