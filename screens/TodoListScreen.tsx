@@ -18,29 +18,27 @@ export default function TodoListScreen() {
 
   return (
     <Container>
-      <Content style={{flex: 1}}>
-        <FlatList
-          data={data.listTodos.items}
-          renderItem={({item}) => <SwipeRow
-            rightOpenValue={-75}
-            body={
-              <View>
-                <Text style={{ paddingLeft: 15 }}>{item.title}</Text>
-              </View>
-            }
-            right={
-              <Button danger onPress={() => {
-                deleteTodos({variables: { id: item.id, title: item.title }});
-                const { listTodos } = client.readQuery({ query: ListTodos });
-                const newListTodos = {...listTodos, items: listTodos.items.filter((todo: Todo) => todo.id !== item.id)};
-                client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
-              }}>
-                <Icon active name="trash" />
-              </Button>
-            }
-          />}
-        />
-      </Content>
+      <FlatList
+        data={data.listTodos.items}
+        renderItem={({item}) => <SwipeRow
+          rightOpenValue={-75}
+          body={
+            <View>
+              <Text style={{ paddingLeft: 15 }}>{item.title}</Text>
+            </View>
+          }
+          right={
+            <Button danger onPress={() => {
+              deleteTodos({variables: { id: item.id, title: item.title }});
+              const { listTodos } = client.readQuery({ query: ListTodos });
+              const newListTodos = {...listTodos, items: listTodos.items.filter((todo: Todo) => todo.id !== item.id)};
+              client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
+            }}>
+              <Icon active name="trash" />
+            </Button>
+          }
+        />}
+      />
       <Footer>
         <Content>
           <Button style={styles.button} block primary
