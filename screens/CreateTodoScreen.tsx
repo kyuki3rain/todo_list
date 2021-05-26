@@ -6,6 +6,7 @@ import { StyleSheet } from 'react-native';
 import getUniqueStr from '../helpers/getUniqueStr';
 import { client } from '../graphql/client';
 import { ListTodos } from '../graphql/queries/ListTodos';
+import { Mutation, Query } from '../graphql/generated/graphql';
 
 const CREATE_TODO = gql`
   mutation createTodo($id: ID!, $title: String!, $body: String) {
@@ -20,7 +21,7 @@ const CREATE_TODO = gql`
 
 export default function CreateTodoScreen() {
   const navigation = useNavigation();
-  const [createTodo, _] = useMutation(CREATE_TODO);
+  const [createTodo, _] = useMutation<Mutation>(CREATE_TODO);
 
   const [title, onChangeTitle] = React.useState("");
   const [body, onChangeBody] = React.useState("");
@@ -37,8 +38,8 @@ export default function CreateTodoScreen() {
             onPress={async () => {
               const todo = { title, body, id: getUniqueStr() };
               createTodo({ variables: { ...todo } });
-              const { listTodos } = client.readQuery({ query: ListTodos });
-              const newListTodos = {...listTodos, items: [...listTodos.items, todo]};
+              const { listTodos } = client.readQuery<Query>({ query: ListTodos })!;
+              const newListTodos = {...listTodos, items: [...listTodos!.items!, todo]};
               await client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } });
               navigation.goBack();
             }}
