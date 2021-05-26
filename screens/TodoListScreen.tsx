@@ -15,7 +15,7 @@ export default function TodoListScreen() {
 
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
-  if (loading || !data) return <Text>Loading...</Text>;
+  if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error :(</Text>;
 
   const onRefresh = async () => {
@@ -27,7 +27,7 @@ export default function TodoListScreen() {
   return (
     <Container>
       <FlatList
-        data={data.listTodos?.items}
+        data={data!.listTodos?.items}
         renderItem={({item}) => {
           if (!item) {return null;}
           return <SwipeRow
@@ -47,6 +47,7 @@ export default function TodoListScreen() {
                 <Icon active name="trash" />
               </Button>
             }
+            key={item.id}
           />;
         }}
         onRefresh={() => onRefresh()}
