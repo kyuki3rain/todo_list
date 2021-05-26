@@ -1,8 +1,0 @@
-#!/bin/bash
-
-cd $(dirname $0)/..
-
-APPSYNC_APP_ID="6hh3zjb2lrgd5nnrmh2g34spee"
-aws appsync get-introspection-schema --api-id ${APPSYNC_APP_ID} --format SDL schema.graphql
-
-yarn graphql-codegen --config codegen.yml
