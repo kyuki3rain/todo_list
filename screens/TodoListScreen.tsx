@@ -10,11 +10,19 @@ import { Todo } from '../graphql/generated/graphql';
 
 export default function TodoListScreen() {
   const navigation = useNavigation();
-  const { loading, error, data } = useQuery(ListTodos);
+  const { loading, error, data, refetch } = useQuery(ListTodos);
   const [deleteTodos, _] = useMutation(DELETE_TODO);
+
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error :(</Text>;
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
+  }
 
   return (
     <Container>
@@ -38,6 +46,8 @@ export default function TodoListScreen() {
             </Button>
           }
         />}
+        onRefresh={() => onRefresh()}
+        refreshing={isRefreshing}
       />
       <Footer>
         <Content>
