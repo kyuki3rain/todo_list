@@ -7,6 +7,7 @@ export const ListTodos = gql`
         id
         title
         body
+        completed
       }
     }
   }

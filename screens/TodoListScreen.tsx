@@ -7,11 +7,13 @@ import { ListTodos } from '../graphql/queries/ListTodos';
 import { DELETE_TODO } from '../graphql/mutations/DeleteTodos';
 import { client } from '../graphql/client';
 import { Mutation, Query } from '../graphql/generated/graphql';
+import { UPDATE_TODO } from '../graphql/mutations/UpdateTodos';
 
 export default function TodoListScreen() {
   const navigation = useNavigation();
   const { loading, error, data, refetch } = useQuery<Query>(ListTodos);
-  const [deleteTodos, _] = useMutation<Mutation>(DELETE_TODO);
+  const [deleteTodos, _d] = useMutation<Mutation>(DELETE_TODO);
+  const [updateTodos, _u] = useMutation<Mutation>(UPDATE_TODO);
 
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
@@ -31,10 +33,26 @@ export default function TodoListScreen() {
         renderItem={({item}) => {
           if (!item) {return null;}
           return <SwipeRow
+            leftOpenValue={75}
             rightOpenValue={-75}
+            left={
+              <Button primary onPress={() => {
+                const completed = (item.completed) ? !item.completed : true;
+                updateTodos({variables: { ...item, completed: completed }});
+                const { listTodos } = client.readQuery<Query>({ query: ListTodos })!;
+                const newListTodos = {...listTodos, items: listTodos?.items?.map((todo) => {
+                  if(todo?.id === item.id) {return {...todo, completed: completed }}
+                  return todo;
+                })};
+                client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } , variables: { userId: item.id }});
+              }}>
+                <Icon active name="checkmark" />
+              </Button>
+            }
             body={
-              <View>
-                <Text style={{ paddingLeft: 15 }}>{item.title}</Text>
+              <View style={{ flexDirection: 'row', height: 20 }}>
+                <Text style={{ paddingLeft: 15}}>{item.title}</Text>
+                {item.completed && <Icon style={{ paddingLeft: 10, fontSize: 18}} name="checkmark-circle" />}
               </View>
             }
             right={

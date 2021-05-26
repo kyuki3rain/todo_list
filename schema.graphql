@@ -18,11 +18,12 @@ type Query {
 type Subscription {
   onCreateTodo(body: String, id: ID, title: String): todo @aws_subscribe(mutations : ["createTodo"])
   onDeleteTodo(body: String, id: ID, title: String): todo @aws_subscribe(mutations : ["deleteTodo"])
-  onUpdateTodo(body: String, id: ID, title: String): todo @aws_subscribe(mutations : ["updateTodo"])
+  onUpdateTodo(body: String, completed: Boolean, id: ID, title: String): todo @aws_subscribe(mutations : ["updateTodo"])
 }
 
 type todo {
   body: String
+  completed: Boolean
   id: ID!
   title: String!
 }
@@ -34,6 +35,7 @@ type todoConnection {
 
 input CreateTodoInput {
   body: String
+  completed: Boolean
   id: ID!
   title: String!
 }
@@ -106,6 +108,7 @@ input TableTodoFilterInput {
 
 input UpdateTodoInput {
   body: String
+  completed: Boolean
   id: ID!
   title: String!
 }

@@ -13,6 +13,7 @@ export type Scalars = {
 
 export type CreateTodoInput = {
   body?: Maybe<Scalars['String']>;
+  completed?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   title: Scalars['String'];
 };
@@ -87,6 +88,7 @@ export type SubscriptionOnDeleteTodoArgs = {
 
 export type SubscriptionOnUpdateTodoArgs = {
   body?: Maybe<Scalars['String']>;
+  completed?: Maybe<Scalars['Boolean']>;
   id?: Maybe<Scalars['ID']>;
   title?: Maybe<Scalars['String']>;
 };
@@ -154,6 +156,7 @@ export type TableTodoFilterInput = {
 
 export type UpdateTodoInput = {
   body?: Maybe<Scalars['String']>;
+  completed?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   title: Scalars['String'];
 };
@@ -161,6 +164,7 @@ export type UpdateTodoInput = {
 export type Todo = {
   __typename?: 'todo';
   body?: Maybe<Scalars['String']>;
+  completed?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   title: Scalars['String'];
 };
