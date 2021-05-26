@@ -1,4 +1,14 @@
+import { Todo } from "../../graphql/generated/graphql";
 import getUniqueStr from "../../helpers/getUniqueStr";
+
+type TodoListState = {
+  todo_list: Array<Todo>,
+}
+
+type TodoListAction = {
+  type: String,
+  value: any
+}
 
 export function reducer(state: TodoListState, action: TodoListAction) {
     switch (action.type) {

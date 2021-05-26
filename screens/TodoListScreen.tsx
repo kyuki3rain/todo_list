@@ -6,6 +6,7 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { ListTodos } from '../graphql/queries/ListTodos';
 import { DELETE_TODO } from '../graphql/mutations/DeleteTodos';
 import { client } from '../graphql/client';
+import { Todo } from '../graphql/generated/graphql';
 
 export default function TodoListScreen() {
   const navigation = useNavigation();
