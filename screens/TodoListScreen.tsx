@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { ListTodos } from '../graphql/queries/ListTodos';
-import { DELETE_TODO } from '../graphql/mutations/deleteTodos';
+import { DELETE_TODO } from '../graphql/mutations/DeleteTodos';
 import { client } from '../graphql/client';
 
 export default function TodoListScreen() {
