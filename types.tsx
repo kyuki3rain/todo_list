@@ -3,8 +3,10 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
+import { Todo } from "./graphql/generated/graphql";
+
 export type RootStackParamList = {
   TodoListScreen: undefined;
-  CreateTodoScreen: undefined;
+  CreateTodoScreen: { todo?: Todo };
   NotFound: undefined;
 };

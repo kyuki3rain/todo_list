@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import { Button, Container, Content, Footer, Icon, SwipeRow, Text } from 'native-base';
 import * as React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ListTodos } from '../graphql/queries/ListTodos';
 import { DELETE_TODO } from '../graphql/mutations/DeleteTodos';
 import { client } from '../graphql/client';
@@ -39,21 +39,24 @@ export default function TodoListScreen() {
               <Button primary onPress={() => {
                 const completed = (item.completed) ? !item.completed : true;
                 updateTodos({variables: { ...item, completed: completed }});
+                console.log( { ...item, completed: completed });
                 const { listTodos } = client.readQuery<Query>({ query: ListTodos })!;
                 const newListTodos = {...listTodos, items: listTodos?.items?.map((todo) => {
                   if(todo?.id === item.id) {return {...todo, completed: completed }}
                   return todo;
                 })};
-                client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } , variables: { userId: item.id }});
+                client.writeQuery({ query: ListTodos, data: { listTodos: newListTodos } , variables: { id: item.id }});
               }}>
                 <Icon active name="checkmark" />
               </Button>
             }
             body={
-              <View style={{ flexDirection: 'row', height: 20 }}>
+              <TouchableOpacity style={{ flexDirection: 'row', height: 20, width: "100%" }} onPress={() => {
+                navigation.navigate("CreateTodoScreen", { todo: item });
+              }}>
                 <Text style={{ paddingLeft: 15}}>{item.title}</Text>
                 {item.completed && <Icon style={{ paddingLeft: 10, fontSize: 18}} name="checkmark-circle" />}
-              </View>
+              </TouchableOpacity>
             }
             right={
               <Button danger onPress={() => {
