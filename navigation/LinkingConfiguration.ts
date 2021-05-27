@@ -12,6 +12,8 @@ export default {
     screens: {
       TodoListScreen: 'TodoListScreen',
       CreateTodoScreen: 'CreateTodoScreen',
+      SignInScreen: 'SignInScreen',
+      SignUpScreen: 'SignUpScreen',
       NotFound: '*',
     },
   },

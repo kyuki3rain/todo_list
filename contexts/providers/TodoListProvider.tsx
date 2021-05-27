@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from 'react';
-import { reducer } from '../reducers/TodoListReducer';
+import { reducer, TodoListAction, TodoListState } from '../reducers/TodoListReducer';
 
 export const TodoListStateContext = createContext({} as TodoListState);
 export const TodoListDispatchContext = createContext({} as React.Dispatch<TodoListAction>);

@@ -11,7 +11,7 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { client } from './graphql/client';
 
-export default function App() {
+function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
@@ -32,3 +32,5 @@ export default function App() {
     );
   }
 }
+
+export default App;
