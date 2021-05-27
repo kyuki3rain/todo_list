@@ -39,7 +39,6 @@ export default function TodoListScreen() {
               <Button primary onPress={() => {
                 const completed = (item.completed) ? !item.completed : true;
                 updateTodos({variables: { ...item, completed: completed }});
-                console.log( { ...item, completed: completed });
                 const { listTodos } = client.readQuery<Query>({ query: ListTodos })!;
                 const newListTodos = {...listTodos, items: listTodos?.items?.map((todo) => {
                   if(todo?.id === item.id) {return {...todo, completed: completed }}
