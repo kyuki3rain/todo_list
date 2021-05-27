@@ -1,8 +1,8 @@
 import React from 'react';
-import { TodoListProvider } from './providers/TodoListProvider';
+import { UserProvider } from './providers/UserProvider';
 
 export const Provider: React.FC = ({children}) => {
     return (
-        <TodoListProvider>{children}</TodoListProvider>
+        <UserProvider>{children}</UserProvider>
     );
 }

@@ -13,6 +13,8 @@ import { RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import TodoListScreen from '../screens/TodoListScreen';
 import CreateTodoScreen from '../screens/CreateTodoScreen';
+import SignInScreen from '../screens/SignInScreen';
+import SignUpScreen from '../screens/SignUpScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -40,6 +42,16 @@ function RootNavigator() {
         name="CreateTodoScreen"
         component={CreateTodoScreen}
         options={{ headerTitle: 'Create New Todo' }}
+      />
+      <Stack.Screen
+        name="SignInScreen"
+        component={SignInScreen}
+        options={{ headerTitle: 'Sign In' }}
+      />
+      <Stack.Screen
+        name="SignUpScreen"
+        component={SignUpScreen}
+        options={{ headerTitle: 'Sign Up' }}
       />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>

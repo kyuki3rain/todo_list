@@ -8,12 +8,34 @@ import { DELETE_TODO } from '../graphql/mutations/DeleteTodos';
 import { client } from '../graphql/client';
 import { Mutation, Query } from '../graphql/generated/graphql';
 import { UPDATE_TODO } from '../graphql/mutations/UpdateTodos';
+import { Auth } from 'aws-amplify';
+import { UserDispatchContext, UserStateContext } from '../contexts/providers/UserProvider';
+
 
 export default function TodoListScreen() {
   const navigation = useNavigation();
   const { loading, error, data, refetch } = useQuery<Query>(ListTodos);
   const [deleteTodos, _d] = useMutation<Mutation>(DELETE_TODO);
   const [updateTodos, _u] = useMutation<Mutation>(UPDATE_TODO);
+  const userDispatch = React.useContext(UserDispatchContext); 
+  const userState = React.useContext(UserStateContext);
+
+  console.log(userState);
+
+  if (!userState.loggedIn){
+    navigation.navigate("SignInScreen");
+    return <View></View>;
+  }
+  
+  async function signOut() {
+    try {
+      await Auth.signOut();
+      userDispatch({type: "logout"});
+      navigation.navigate("LoginScreen");
+    } catch (error) {
+      console.log('error signing out: ', error);
+    }
+  }
 
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
@@ -71,13 +93,16 @@ export default function TodoListScreen() {
         onRefresh={() => onRefresh()}
         refreshing={isRefreshing}
       />
+      <Button style={styles.button} block primary
+        onPress={() => {
+          navigation.navigate("CreateTodoScreen");
+        }}
+      ><Text> new </Text></Button>
       <Footer>
         <Content>
-          <Button style={styles.button} block primary
-            onPress={() => {
-              navigation.navigate("CreateTodoScreen");
-            }}
-          ><Text> new </Text></Button>
+          <Button style={styles.button} block danger
+            onPress={signOut}
+          ><Text> sign out </Text></Button>
         </Content>
       </Footer>
     </Container>

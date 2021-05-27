@@ -1,11 +1,11 @@
 import { Todo } from "../../graphql/generated/graphql";
 import getUniqueStr from "../../helpers/getUniqueStr";
 
-type TodoListState = {
+export type TodoListState = {
   todo_list: Array<Todo>,
 }
 
-type TodoListAction = {
+export type TodoListAction = {
   type: String,
   value: any
 }
