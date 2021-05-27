@@ -32,7 +32,6 @@ export default function CreateTodoScreen() {
 
   const update = (title: string, body: string) => {
     const updated_todo = { ...params.todo, title, body };
-    console.log(updated_todo);
     updateTodos({variables: updated_todo　});
     const { listTodos } = client.readQuery<Query>({ query: ListTodos })!;
     const newListTodos = {...listTodos, items: listTodos?.items?.map((todo) => {
