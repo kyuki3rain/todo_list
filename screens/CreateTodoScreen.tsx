@@ -10,6 +10,7 @@ import { CREATE_TODO } from '../graphql/mutations/CreateTodo';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../types';
 import { UPDATE_TODO } from '../graphql/mutations/UpdateTodos';
+import getUniqueStr from '../helpers/getUniqueStr';
 
 export default function CreateTodoScreen() {
   const navigation = useNavigation();
@@ -17,13 +18,13 @@ export default function CreateTodoScreen() {
   const [createTodo, _] = useMutation<Mutation>(CREATE_TODO);
   const [updateTodos, _u] = useMutation<Mutation>(UPDATE_TODO);
 
-  const [title, onChangeTitle] = React.useState(params.todo?.title || "");
-  const [body, onChangeBody] = React.useState(params.todo?.body || "");
+  const [title, onChangeTitle] = React.useState(params?.todo?.title || "");
+  const [body, onChangeBody] = React.useState(params?.todo?.body || "");
 
-  const isUpdate = params.todo != null;
+  const isUpdate = params?.todo != null;
 
   const create = (title: string, body: string) => {
-    const todo = { title, body, completed: false };
+    const todo = { title, body, completed: false, id: getUniqueStr() };
     createTodo({ variables: todo });
     const { listTodos } = client.readQuery<Query>({ query: ListTodos })!;
     const newListTodos = {...listTodos, items: [...listTodos!.items!, todo]};
@@ -31,7 +32,7 @@ export default function CreateTodoScreen() {
   }
 
   const update = (title: string, body: string) => {
-    const updated_todo = { ...params.todo, title, body };
+    const updated_todo = { ...params?.todo, title, body };
     updateTodos({variables: updated_todo　});
     const { listTodos } = client.readQuery<Query>({ query: ListTodos })!;
     const newListTodos = {...listTodos, items: listTodos?.items?.map((todo) => {
